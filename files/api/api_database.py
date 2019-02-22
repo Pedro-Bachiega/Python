@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, make_response
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean
 from api_config import DATABASE_NAME, DATABASE_PATH

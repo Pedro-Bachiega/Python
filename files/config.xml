@@ -1,0 +1,6 @@
+<data>
+    <items>
+        <item name="server_ip">127.0.0.1</item>
+        <item name="server_port">5000</item>
+    </items>
+</data>

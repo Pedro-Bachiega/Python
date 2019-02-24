@@ -1,8 +1,10 @@
 import os
-from flask import Flask
+from flask import Flask, json
 from flask_sqlalchemy import SQLAlchemy
+from api_models import CharacterResponse
 from sqlalchemy import Column, Integer, String, Boolean
 from api_config import DATABASE_NAME, DATABASE_PATH
+from sqlalchemy.ext.serializer import dumps
 
 app = Flask(__name__)
 app.config.from_object('api_config.DevelopmentConfig')
@@ -25,6 +27,15 @@ class Character(database.Model):
 
     def __ref__(self):
         return '<Character(name: %s, class: %s, dead: %r, active: %r)>' % (self.name, self.category, self.dead, self.active)
+
+    def toCharacterResponse(self):
+        return CharacterResponse(
+            id = self.id, 
+            name = self.name,
+            category = self.category,
+            dead = self.dead,
+            active = self.active
+        )
         
 if __name__ != '__main__':
     try:

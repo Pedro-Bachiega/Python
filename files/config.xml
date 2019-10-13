@@ -2,5 +2,9 @@
     <items>
         <item name="server_ip">127.0.0.1</item>
         <item name="server_port">5000</item>
+        <item name="database_ip">localhost</item>
+        <item name="database_name">untitled_game</item>
+        <item name="database_user">root</item>
+        <item name="database_password">pedrinho290196</item>
     </items>
 </data>

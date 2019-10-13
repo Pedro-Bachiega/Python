@@ -9,14 +9,11 @@ app.config.from_object(DevelopmentConfig)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(
-        jsonify(
+    return jsonify(
             {
                 'error': 'Not found'
             }
-        ),
-        404
-    )
+        ), 404
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -37,9 +34,9 @@ def sign_up():
             {
                 'account_id': '%d'%id
             }
-        )
+        ), 200
     elif id == DUPLICATE_ENTRY:
-        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
+        response = jsonify({'error': 'DUPLICATE_ENTRY'}), 400
         
     return response
 
@@ -50,13 +47,13 @@ def sign_in():
     
     account = account_services.sign_in(content['user'], content['password'])
     if account != None:
-        response = jsonify(account.__repr__())
+        response = account, 200
     else:
-        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
+        response = jsonify({'error': 'NOT_FOUND'}), 400
     
     return response
 
-@app.route('/accounts/delete/<account_id>', methods = ['DELETE'])
+@app.route('/accounts/<account_id>/delete', methods = ['DELETE'])
 def delete_account(account_id: int):
     response = None
     
@@ -64,13 +61,13 @@ def delete_account(account_id: int):
     if rows_affected > 0:
         response = jsonify(success=True)
     else:
-        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
+        response = jsonify({'error': 'NOT_FOUND'}), 400
     
     return response
 
-@app.route('/<account_id>/worlds/create/<name>', methods = ['PUT'])
-def create_world(account_id: int, name: str):
-    world_id = world_services.create_world(account_id, name)
+@app.route('/<account_id>/worlds/<world_name>/create', methods = ['PUT'])
+def create_world(account_id: int, world_name: str):
+    world_id = world_services.create_world(account_id, world_name)
     worlds = world_services.get_account_worlds(account_id)
     last_index = len(worlds) - 1
     newest_world = worlds[last_index]
@@ -87,13 +84,7 @@ def create_world(account_id: int, name: str):
 @app.route('/<account_id>/worlds', methods = ['GET'])
 def get_account_worlds(account_id: int):
     worlds = world_services.get_account_worlds(account_id)
-    worlds_as_json = []
-        
-    if len(worlds) > 0:
-        for i in range(0, len(worlds)):
-            worlds_as_json.append(worlds[i].__repr__())
-    
-    return make_response(jsonify(worlds_as_json))
+    return jsonify(worlds)
 
 @app.route('/worlds/<world_id>/delete', methods = ['DELETE'])
 def delete_world(world_id: int):
@@ -103,7 +94,7 @@ def delete_world(world_id: int):
     if rows_affected > 0:
         response = jsonify(success=True)
     else:
-        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
+        response = jsonify({'error': 'NOT_FOUND'}), 400
     
     return response
 
@@ -114,45 +105,39 @@ def create_attribute(world_id: int):
     attribute_id = attribute_services.create_attribute(world_id, content['name'], content['description'], content['type'], content['negative_enabled'] == 'true')
     
     if attribute_id > 0:
-        response = make_response(
-            jsonify(
+        response = jsonify(
                 {
                     'world_id': world_id,
                     'attribute_id': attribute_id
                 }
-            )
-        )
+            ), 200
     elif id == DUPLICATE_ENTRY:
-        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
+        response = jsonify({'error': 'DUPLICATE_ENTRY'}), 400
         
     return response
 
 @app.route('/worlds/<world_id>/attributes', methods = ['GET'])
 def get_attributes_for_world(world_id: int):
     attributes = attribute_services.get_attributes_for_world(world_id)
-    attributes_as_json = []
-    
-    if len(attributes) > 0:
-        for i in range(0, len(attributes)):
-            attributes_as_json.append(attributes[i].__repr__())
+    return make_response(jsonify(attributes))
 
-    return make_response(jsonify(attributes_as_json))
-
-@app.route('/<account_id>/worlds/<world_id>/characters/create', methods = ['POST'])
-def create_character(account_id: int, world_id: int):
+@app.route('/<account_id>/worlds/<world_id>/characters/<char_name>/create', methods = ['PUT'])
+def create_character(account_id: int, world_id: int, char_name: str):
     response = None
-    content = request.json
-    char_id = character_services.create_character(account_id, world_id, content['name'])
+    char_id = character_services.create_character(account_id, world_id, char_name)
     
     if char_id > 0:
-        response = make_response(
-            jsonify(
+        response = jsonify(
                 {
                     'character_id': char_id
                 }
-            )
-        )
+            ), 200
     elif char_id == DUPLICATE_ENTRY:
-        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
+        response = jsonify({'error': 'DUPLICATE_ENTRY'}), 400
         
     return response
+
+@app.route('/<account_id>/worlds/<world_id>/characters', methods = ['GET'])
+def get_account_characters(account_id: int, world_id: int):
+    characters = character_services.get_characters_for_account(account_id, world_id)
+    return jsonify(characters)

@@ -5,10 +5,12 @@ def sign_up(user: str, password: str, name: str) -> int:
     return AccountDAO.create_account(user, password, name)
 
 def sign_in(user: str, password: str) -> Account:
-    return AccountDAO.get_account_for_login(user, password)
+    account = AccountDAO.get_account_for_login(user, password)
+    return account.__repr__()
 
 def get_account_for_id(account_id: int) -> Account:
-    return AccountDAO.get_account_for_id(account_id)
+    account = AccountDAO.get_account_for_id(account_id)
+    return account.__repr__()
 
 def delete_account(account_id: int) -> int:
     return AccountDAO.delete_account(account_id)

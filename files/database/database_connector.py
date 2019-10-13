@@ -48,7 +48,7 @@ def insert(table_name: str, fields: list, values: list):
             values_formatted = values_formatted + '%s'%values[i].value
         
     values_formatted = values_formatted + ')'
-    command = 'INSERT INTO %s %s VALUES %s'%(table_name, fields_formatted, values_formatted)
+    command = 'INSERT INTO untitled_game.%s %s VALUES %s'%(table_name, fields_formatted, values_formatted)
     
     try:
         get_connection()
@@ -73,7 +73,7 @@ def insert(table_name: str, fields: list, values: list):
 def delete(table_name: str, conditions: list, values: list):
     rows_deleted = 0
     
-    command = 'DELETE FROM %s WHERE %s='%(table_name, conditions[0])
+    command = 'DELETE FROM untitled_game.%s WHERE %s='%(table_name, conditions[0])
     if values[0].type == 'text':
         command = command + '\'%s\''%values[0].value
     else:
@@ -81,7 +81,7 @@ def delete(table_name: str, conditions: list, values: list):
     
     if len(conditions) > 1:
         for i in range(1, len(conditions)):
-            command = command + ' and %s='%conditions[i]
+            command = command + ' AND %s='%conditions[i]
             
             if values[i].type == 'text':
                 command = command + '\'%s\''%values[i].value
@@ -107,7 +107,7 @@ def delete(table_name: str, conditions: list, values: list):
 def fetch(table_name: str, single: bool, conditions: list, values: list):
     result = None
     
-    command = 'SELECT * FROM %s WHERE %s='%(table_name, conditions[0])
+    command = 'SELECT * FROM untitled_game.%s WHERE %s='%(table_name, conditions[0])
     if values[0].type == 'text':
         command = command + '\'%s\''%values[0].value
     else:
@@ -115,7 +115,7 @@ def fetch(table_name: str, single: bool, conditions: list, values: list):
     
     if len(conditions) > 1:
         for i in range(1, len(conditions)):
-            command = command + ' and %s='%conditions[i]
+            command = command + ' AND %s='%conditions[i]
             
             if values[i].type == 'text':
                 command = command + '\'%s\''%values[i].value
@@ -140,8 +140,29 @@ def fetch(table_name: str, single: bool, conditions: list, values: list):
         
     return result
 
-def select(table_name: str, conditions, values) -> list:
+def select(table_name: str, conditions: list, values: list) -> list:
     return fetch(table_name, False, conditions, values)
 
-def select_one(table_name: str, conditions, values) -> list:
+def select_one(table_name: str, conditions: list, values: list) -> list:
     return fetch(table_name, True, conditions, values)
+
+def custom_select(command: str, single: bool):
+    result = None
+    
+    try:
+        get_connection()
+        
+        if cursor != None and db.is_connected():
+            cursor.execute(command)
+            
+            if single:
+                result = cursor.fetchone()
+            else:
+                result = cursor.fetchall()
+    except Error as e:
+        print('Unable to execute command:\n    %s'%command)
+        print('Details:\n    %s'%e)
+    finally:
+        close_connection()
+        
+    return result

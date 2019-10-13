@@ -25,5 +25,5 @@ def get_characters_for_account(account_id: int, world_id: int) -> list:
 def get_character_details(character_id: int) -> Character:
     char = CharacterDAO.get_character(character_id)
     attrs = AttributeDAO.get_attributes_for_character(character_id)
-    char.attributes = attrs
+    char.attributes = convert_list_to_json_list(attrs)
     return char.__repr__()

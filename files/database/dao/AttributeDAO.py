@@ -14,7 +14,6 @@ def get_attributes_for_character(character_id: int) -> list:
     command_portions.append('INNER JOIN attribute ON character_attributes.attribute_id = attribute.attribute_id')
     command_portions.append('WHERE character_attributes.character_id = %s'%character_id)
     command = ' '.join(command_portions)
-    print(command)
     
     try:
         db_list = db_conn.custom_select(command, False)

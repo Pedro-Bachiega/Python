@@ -14,12 +14,6 @@ def create_character(account_id:int, world_id: int, name: str) -> int:
 
 def get_characters_for_account(account_id: int, world_id: int) -> list:
     characters = CharacterDAO.get_characters_for_account(account_id, world_id)
-    
-    if len(characters) > 0:
-        for i in range(len(characters)):
-            attrs = AttributeDAO.get_attributes_for_character(characters[i].character_id)
-            characters[i].attributes = convert_list_to_json_list(attrs)
-    
     return convert_list_to_json_list(characters)
 
 def get_character_details(character_id: int) -> Character:

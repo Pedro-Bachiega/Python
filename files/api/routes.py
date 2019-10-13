@@ -65,7 +65,7 @@ def create_world(account_id: int, world_name: str):
 @app.route('/<account_id>/worlds', methods = ['GET'])
 def get_account_worlds(account_id: int):
     worlds = world_services.get_account_worlds(account_id)
-    return worlds, 200
+    return jsonify(worlds), 200
 
 @app.route('/worlds/<world_id>/delete', methods = ['DELETE'])
 def delete_world(world_id: int):
@@ -95,7 +95,7 @@ def create_attribute(world_id: int):
 @app.route('/worlds/<world_id>/attributes', methods = ['GET'])
 def get_attributes_for_world(world_id: int):
     attributes = attribute_services.get_attributes_for_world(world_id)
-    return attributes, 200
+    return jsonify(attributes), 200
 
 @app.route('/<account_id>/worlds/<world_id>/characters/<char_name>/create', methods = ['PUT'])
 def create_character(account_id: int, world_id: int, char_name: str):
@@ -112,7 +112,7 @@ def create_character(account_id: int, world_id: int, char_name: str):
 @app.route('/<account_id>/worlds/<world_id>/characters', methods = ['GET'])
 def get_account_characters(account_id: int, world_id: int):
     characters = character_services.get_characters_for_account(account_id, world_id)
-    return characters, 200
+    return jsonify(characters), 200
 
 @app.route('/characters/<character_id>', methods = ['GET'])
 def get_character_details(character_id: int):

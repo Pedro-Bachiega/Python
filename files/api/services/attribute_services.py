@@ -12,3 +12,6 @@ def get_attributes_for_world(world_id: int) -> list:
 
 def create_attribute(world_id: int, name: str, description: str, attr_type: str, negative_enabled: bool) -> int:    
     return AttributeDAO.create_attribute(world_id, Attribute(-1, name, description, attr_type, negative_enabled))
+
+def insert_attributes_for_character(character_id: int, attributes: list):
+    return AttributeDAO.insert_attributes_for_character(character_id, attributes)

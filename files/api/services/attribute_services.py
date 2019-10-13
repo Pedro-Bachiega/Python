@@ -1,5 +1,5 @@
 from ...database.dao import AttributeDAO
-from ...models import Attribute
+from ...models.attribute import Attribute
 
 def get_attributes_for_character(character_id: int) -> list:
     return AttributeDAO.get_attributes_for_character(character_id)

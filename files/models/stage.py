@@ -1,4 +1,4 @@
-from . import JsonSerializable
+from .json_serializable import JsonSerializable
         
 class Stage(JsonSerializable):
     def __init__(self, stage_id: int, quest_id: int, stage_number: int, stage_question: str, decisions: list):

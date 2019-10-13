@@ -1,4 +1,4 @@
-from . import JsonSerializable
+from .json_serializable import JsonSerializable
 
 class Attribute(JsonSerializable):
     def get_default_value(self, attr_type: str):

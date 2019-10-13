@@ -1,4 +1,4 @@
-from . import JsonSerializable
+from .json_serializable import JsonSerializable
         
 class Decision(JsonSerializable):
     def __init__(self, decision_id: int, stage_id: int, label: str, success_chance: int, success_message: str, failure_message: str):

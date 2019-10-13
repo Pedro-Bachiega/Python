@@ -1,4 +1,4 @@
-from . import JsonSerializable
+from .json_serializable import JsonSerializable
         
 class QuestReward(JsonSerializable):
     def __init__(self, attribute_id: int, value: str):

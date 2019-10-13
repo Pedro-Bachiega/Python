@@ -1,15 +1,11 @@
 from flask import Flask, json, jsonify, request, make_response
 from files.api.services import account_services, attribute_services, character_services, world_services
-from files.models import Attribute
 from files.database.db_utils import DUPLICATE_ENTRY
 from json import JSONEncoder
 from .config import DevelopmentConfig
 
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
-
-duplicate_entry_response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
-not_found_response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -43,7 +39,7 @@ def sign_up():
             }
         )
     elif id == DUPLICATE_ENTRY:
-        response = duplicate_entry_response
+        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
         
     return response
 
@@ -56,7 +52,7 @@ def sign_in():
     if account != None:
         response = jsonify(account.__repr__())
     else:
-        response = not_found_response
+        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
     
     return response
 
@@ -68,7 +64,7 @@ def delete_account(account_id: int):
     if rows_affected > 0:
         response = jsonify(success=True)
     else:
-        response = not_found_response
+        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
     
     return response
 
@@ -107,7 +103,7 @@ def delete_world(world_id: int):
     if rows_affected > 0:
         response = jsonify(success=True)
     else:
-        response = not_found_response
+        response = make_response(jsonify({'error': 'NOT_FOUND'}), 400)
     
     return response
 
@@ -127,7 +123,7 @@ def create_attribute(world_id: int):
             )
         )
     elif id == DUPLICATE_ENTRY:
-        response = duplicate_entry_response
+        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
         
     return response
 
@@ -157,6 +153,6 @@ def create_character(account_id: int, world_id: int):
             )
         )
     elif char_id == DUPLICATE_ENTRY:
-        response = duplicate_entry_response
+        response = make_response(jsonify({'error': 'DUPLICATE_ENTRY'}), 400)
         
     return response

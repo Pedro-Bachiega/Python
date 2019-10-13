@@ -1,4 +1,4 @@
-from . import JsonSerializable
+from .json_serializable import JsonSerializable
         
 class Character(JsonSerializable):
     def __init__(self, character_id: int, account_id: int, world_id: int, name: str, level: int):

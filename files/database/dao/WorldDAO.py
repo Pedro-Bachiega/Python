@@ -6,23 +6,23 @@ from random import randint
 world_table_name = 'world'
 
 def create_world(account_id: int, name: str) -> int:
+    response = None
     fields = ['creator_account_id', 'public_id', 'name']
     values = [Value(account_id), Value(randint(1, 99999999999)), Value(name)]
-    
     world_id = db_conn.insert(world_table_name, fields, values)
-    response = None
+    
     if world_id == -2:
         response = create_world(account_id, name)
     else:
         response = world_id
-    print(response)
+        
     return response
 
 def get_worlds_for_account(creator_account_id: int) -> list:
+    response = None
     fields = ['creator_account_id']
     values = [Value(creator_account_id)]
     world_list = []
-    response = None
     
     try:
         account_worlds = db_conn.select(world_table_name, fields, values)

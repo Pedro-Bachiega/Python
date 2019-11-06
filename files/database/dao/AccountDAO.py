@@ -9,8 +9,8 @@ def get_account_for_id(account_id: int) -> Account:
     fields = ['account_id']
     values = [Value(account_id)]
     
-    _, user, password, name = db_conn.select_one(account_table_name, fields, values)   
-    return Account(account_id, user, password, name)
+    _, _, _, name = db_conn.select_one(account_table_name, fields, values)   
+    return Account(account_id, '********', '********', name)
 
 def get_account_for_login(user: str, password: str) -> Account:
     fields = ['user', 'password']
@@ -19,16 +19,16 @@ def get_account_for_login(user: str, password: str) -> Account:
     
     try:
         id, _, _, name = db_conn.select_one(account_table_name, fields, values)
-        account = Account(id, user, password, name)
+        account = Account(id, '********', '********', name)
     except TypeError as e:
         print(e)
         pass
     
     return account
 
-def create_account(user: str, password: str, name: str) -> int:
+def create_account(account: Account) -> int:
     column_list = ['user', 'password', 'name']
-    values = [Value(user), Value(password), Value(name)]
+    values = [Value(account.user), Value(account.password), Value(account.name)]
     return db_conn.insert(account_table_name, column_list, values)
     
 def delete_account(account_id: int) -> int:

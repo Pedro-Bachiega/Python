@@ -18,9 +18,8 @@ def index():
 @app.route('/accounts/sign_up', methods = ['POST'])
 def sign_up():
     response = None
-    content = request.json
-    
-    id = account_services.sign_up(content['user'], content['password'], content ['name'])
+        
+    id = account_services.sign_up(request.json)
     if id > 0:
         response = {'account_id': '%d'%id}, 200
     elif id == DUPLICATE_ENTRY:
@@ -31,9 +30,8 @@ def sign_up():
 @app.route('/accounts/sign_in', methods = ['POST'])
 def sign_in():
     response = None
-    content = request.json
     
-    account = account_services.sign_in(content['user'], content['password'])
+    account = account_services.sign_in(request.json)
     if account != None:
         response = account, 200
     else:
@@ -55,12 +53,8 @@ def delete_account(account_id: int):
 
 @app.route('/<account_id>/worlds/<world_name>/create', methods = ['PUT'])
 def create_world(account_id: int, world_name: str):
-    world_id = world_services.create_world(account_id, world_name)
-    worlds = world_services.get_account_worlds(account_id)
-    last_index = len(worlds) - 1
-    newest_world = worlds[last_index]
-    
-    return {'world_id': newest_world.world_id, 'public_id': newest_world.public_id}, 200
+    world_id = world_services.create_world(account_id, world_name)    
+    return {'world_id': world_id}, 200
     
 @app.route('/<account_id>/worlds', methods = ['GET'])
 def get_account_worlds(account_id: int):
@@ -82,8 +76,7 @@ def delete_world(world_id: int):
 @app.route('/worlds/<world_id>/attributes/create', methods = ['POST'])
 def create_attribute(world_id: int):
     response = None
-    content = request.json
-    attribute_id = attribute_services.create_attribute(world_id, content['name'], content['description'], content['type'], content['negative_enabled'] == 'true')
+    attribute_id = attribute_services.create_attribute(world_id, request.json)
     
     if attribute_id > 0:
         response = {'world_id': world_id, 'attribute_id': attribute_id}, 200

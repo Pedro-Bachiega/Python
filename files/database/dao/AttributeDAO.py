@@ -32,7 +32,7 @@ def insert_attributes_for_character(character_id: int, attributes: list):
     fields = ['character_id', 'attribute_id', 'value']
     
     if len(attributes) > 0:
-        for i in range(len(attributes)):
+        for i in range(0, len(attributes)):
             attribute = attributes[i]
             values = [Value(character_id), Value(attribute.id), Value(attribute.value)]
             db_conn.insert(character_attributes_table_name, fields, values)
